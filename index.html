@@ -575,36 +575,37 @@
       previewArea.scrollIntoView({behavior:'smooth'});
     }
 
-    function generatePdfFromPreview(){
-      if(previewArea.style.display === 'none'){
-        alert('ابتدا فرم را ثبت (نمایش پیش‌نمایش) کنید تا PDF ساخته شود.');
-        return;
-      }
-      // تبدیل پیش‌نمایش به PDF با html2pdf
-      const element = document.createElement('div');
-      element.style.direction = 'rtl';
-      element.style.fontFamily = 'Vazir, Tahoma, sans-serif';
-      element.style.padding = '18px';
-      element.style.background = '#fff';
-      element.style.color = '#222';
-      element.style.maxWidth = '800px';
-      element.innerHTML = `<pre style="font-family:inherit; font-size:14px; white-space:pre-wrap;">${escapeHtml(previewContent.textContent)}</pre>`;
+async function generatePdfFromPreview(){
+  if(previewArea.style.display === 'none'){
+    alert('ابتدا فرم را ثبت کنید');
+    return;
+  }
 
-      const opt = {
-        margin:       10,
-        filename:     `Form_Saman_${new Date().toISOString().slice(0,10)}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS:true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+  const element = document.createElement('div');
+  element.style.direction = 'rtl';
+  element.style.fontFamily = 'Vazir, Tahoma, sans-serif';
+  element.style.padding = '18px';
+  element.style.background = '#fff';
+  element.innerHTML =
+    `<pre style="white-space:pre-wrap;">${escapeHtml(previewContent.textContent)}</pre>`;
 
-      html2pdf().set(opt).from(element).save();
-    }
+  const opt = {
+    margin: 10,
+    filename: "Form.pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+  };
 
-    function escapeHtml(text){
-      // preserve Persian characters and simple escaping for HTML inside <pre>
-      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
+  const pdfBlob = await html2pdf()
+      .set(opt)
+      .from(element)
+      .outputPdf('blob');
+
+  // ارسال مستقیم PDF به ایمیل
+  await sendPdfToEmail(pdfBlob);
+}
+
 
   </script>
 </body>
