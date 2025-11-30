@@ -625,14 +625,13 @@ async function sendPdfToEmail(pdfBlob) {
   reader.onloadend = async function () {
     const base64 = reader.result.split(",")[1];
 
-await fetch("https://script.google.com/macros/s/AKfycbzw8SE3OAnAGjSIRGI-E_IrxWIY1vERb9fxAlwkt1GniWe_11kC-PhEnjYzfJtPe-bX/exec", {
+await fetch("https://script.google.com/macros/s/AKfycbzw85E3OAnAGjSIRGI-E_IrxWIY1vERb9fxAlwkt1GniWe_11kC-PhEnjYzfJtPe-bX/exec", {
   method: "POST",
-  // درخواست ساده بشود تا preflight نفرستد
-  headers: { "Content-Type": "text/plain;charset=utf-8" },
-  body: JSON.stringify({ pdf: base64 })
-  // اگر هنوز CORS دیدی، این خط را هم اضافه کن:
-  // mode: "no-cors"
+  mode: "no-cors",
+  headers: { "Content-Type": "text/plain" },
+  body: base64     // فقط متن خام
 });
+
 
 
 
