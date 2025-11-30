@@ -620,27 +620,25 @@ async function generatePdfFromPreview(){
   await sendPdfToEmail(pdfBlob);
 }
 async function sendPdfToEmail(pdfBlob) {
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onloadend = async function () {
-    const base64 = reader.result.split(",")[1];
+    reader.onloadend = async function () {
+        const base64 = reader.result.split(",")[1];
 
-await fetch("https://script.google.com/macros/s/AKfycbylH0XQv3ZMqHE41HsIZC10XS9NZbNPuDCn3SuhMcGDe7vAwnIRjyuFVBLvso8mWSxQ/exec", {
+        await fetch("https://script.google.com/macros/s/AKfycbyIH0XQv3ZMQHE4lHslZC10XS9NZbNPuDCn3SuhMcGDe7vAwnIRjuyFVBLIvso8mWSxQ/exec", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                pdf: base64
+            })
+        });
 
-  method: "POST",
-  mode: "no-cors",
-  headers: { "Content-Type": "text/plain" },
-  body: base64     // فقط متن خام
-});
+        alert("✔ با موفقیت به ایمیل شما ارسال شد PDF ");
+    };
 
-
-
-
-    alert("PDF با موفقیت به ایمیل شما ارسال شد ✔");
-  };
-
-  reader.readAsDataURL(pdfBlob);
+    reader.readAsDataURL(pdfBlob);
 }
+
 
 
 
