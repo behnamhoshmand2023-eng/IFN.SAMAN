@@ -630,7 +630,7 @@ reader.onloadend = async function() {
     console.log("BASE64 LENGTH:", base64.length);
     console.log("BASE64 START:", base64.substring(0, 100));
 
-    await fetch("https://script.google.com/macros/s/AKfycbyIH0XQv3ZMqHE41HsIZC10XS9NzBNpuDCn3SuhMcGDe7vAwnIRjyuFVBLvso8mWSxQ/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbz1y6zJ3jjku-OZQHTHF_SyCHw6bdMc7qRPrnfQJq9rvrsTD38SmrjZba0RAoYDIE6J/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pdf: base64 })
