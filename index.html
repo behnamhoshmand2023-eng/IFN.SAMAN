@@ -614,7 +614,8 @@ async function generatePdfFromPreview(){
   const pdfBlob = await html2pdf()
       .set(opt)
       .from(element)
-      .outputPdf('blob');
+      .output('blob');
+
 
   // ارسال مستقیم PDF به ایمیل
   await sendPdfToEmail(pdfBlob);
