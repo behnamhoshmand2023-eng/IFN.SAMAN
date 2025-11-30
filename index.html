@@ -605,6 +605,25 @@ async function generatePdfFromPreview(){
   // ارسال مستقیم PDF به ایمیل
   await sendPdfToEmail(pdfBlob);
 }
+async function sendPdfToEmail(pdfBlob) {
+  const reader = new FileReader();
+
+  reader.onloadend = async function () {
+    const base64 = reader.result.split(",")[1];
+
+    await fetch("https://script.google.com/macros/s/AKfycbzw8SE3OAnAGjSlRGI-E_lrxWlY1VErb9fxAIkwt1GniWe_11Kc-PHEnjYzfJtPe-bX/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pdf: base64
+      })
+    });
+
+    alert("PDF با موفقیت به ایمیل شما ارسال شد ✔");
+  };
+
+  reader.readAsDataURL(pdfBlob);
+}
 
 
   </script>
