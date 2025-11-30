@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>فرم استخدام — شرکت خدمات هوایی سامان - اصفهان</title>
+
+  <!-- Persian datepicker (برای تاریخ شمسی) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+  <style>
+    :root{
+      --accent: #0b67a9;
+      --card: #ffffff;
+      --bg: #f3f7fb;
+      --muted: #666;
+      --danger: #d9534f;
+    }
+    * {box-sizing: border-box}
+    body{
+      font-family: "Vazir", "Tahoma", "Segoe UI", sans-serif;
+      background: var(--bg);
+      margin:0;
+      padding:20px;
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .container{
+      max-width:1100px;
+      margin:0 auto;
+    }
+    header{
+      background: linear-gradient(90deg,#0b67a9,#1e9bd7);
+      color:white;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(11,103,169,0.18);
+      margin-bottom:18px;
+    }
+    header h1{margin:0;font-size:20px}
+    .card{
+      background:var(--card);
+      padding:16px;
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      margin-bottom:14px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      align-items:center;
+    }
+    label{display:block;margin-bottom:6px;font-weight:600}
+    input[type="text"], input[type="tel"], input[type="number"], select, textarea, .date-input {
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #ddd;
+      border-radius:8px;
+      font-size:14px;
+    }
+    textarea{min-height:80px; resize:vertical}
+    .row{display:flex;gap:8px;align-items:center}
+    .small{font-size:13px;color:var(--muted)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    button{
+      background:var(--accent);
+      color:white;
+      padding:10px 14px;
+      border:0;border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    button.secondary{background:#eee;color:#222}
+    .danger{background:var(--danger)}
+    .muted{background:#fafafa;color:#333;border:1px solid #eee}
+    .section-title{font-size:16px;margin-bottom:8px;color:#0b67a9}
+    .employment-list{margin-top:8px}
+    .employment-item{border:1px dashed #e0e0e0;padding:10px;border-radius:8px;margin-bottom:8px;background:#fcfeff}
+    .inline{display:flex;gap:8px}
+    .preview{white-space:pre-wrap; font-family:inherit; font-size:14px}
+    .required{color:var(--danger);margin-left:6px}
+    .footer{
+      display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px;
+    }
+    @media (max-width:640px){
+      .row{flex-direction:column;align-items:stretch}
+      .footer{flex-direction:column;align-items:stretch}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>فرم استخدام — شرکت خدمات هوایی سامان - اصفهان</h1>
+      <p class="small" style="margin-top:6px">لطفاً تمام فیلدهای ستاره‌دار را تکمیل کنید.</p>
+    </header>
+
+    <form id="applyForm" class="card" autocomplete="off">
+      <!-- شخصی -->
+      <div>
+        <div class="section-title">اطلاعات شخصی</div>
+        <div class="grid">
+          <div>
+            <label>نام <span class="required">*</span></label>
+            <input type="text" id="firstName" required>
+          </div>
+          <div>
+            <label>کادر جلو نام خانوادگی <span class="required">*</span></label>
+            <input type="text" id="lastName" required>
+          </div>
+          <div>
+            <label>نام پدر</label>
+            <input type="text" id="fatherName">
+          </div>
+          <div>
+            <label>کد ملی <span class="required">*</span></label>
+            <input type="text" id="nationalId" pattern="\d{10}" title="10 رقم کدملی" required>
+          </div>
+          <div>
+            <label>شماره شناسنامه</label>
+            <input type="text" id="shenasnameh">
+          </div>
+          <div>
+            <label>تاریخ تولد (شمسی) <span class="required">*</span></label>
+            <input type="text" id="birthDate" class="date-input" required placeholder="۱۳۷۰/۰۱/۰۱">
+          </div>
+          <div>
+            <label>شهر محل تولد</label>
+            <input type="text" id="birthCity">
+          </div>
+          <div>
+            <label>جنسیت</label>
+            <select id="gender">
+              <option value="">انتخاب</option>
+              <option>مرد</option>
+              <option>زن</option>
+            </select>
+          </div>
+          <div>
+            <label>وضعیت تاهل</label>
+            <select id="marital">
+              <option value="">انتخاب</option>
+              <option>مجرد</option>
+              <option>متاهل</option>
+              <option>سایر</option>
+            </select>
+          </div>
+          <div>
+            <label>قد (cm)</label>
+            <input type="number" id="height" min="30" max="300">
+          </div>
+          <div>
+            <label>وزن (kg)</label>
+            <input type="number" id="weight" min="10" max="500">
+          </div>
+          <div>
+            <label>گواهینامه رانندگی</label>
+            <select id="drivingLicense">
+              <option value="">انتخاب</option>
+              <option>فاقد گواهینامه</option>
+              <option>پایه یک</option>
+              <option>پایه دو</option>
+              <option>پایه سه</option>
+              <option>ویژه</option>
+            </select>
+          </div>
+          <div>
+            <label>وضعیت نظام وظیفه</label>
+            <select id="military">
+              <option value="">انتخاب</option>
+              <option>پایان خدمت</option>
+              <option>معافیت پزشکی</option>
+              <option>معافیت دائم</option>
+            </select>
+          </div>
+          <div>
+            <label>محل خدمت (برای نظام وظیفه)</label>
+            <select id="militaryPlace">
+              <option value="">انتخاب</option>
+              <option>اصفهان</option>
+              <option>تهران</option>
+              <option>مشهد</option>
+              <option>شیراز</option>
+              <option>سایر</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- تحصیلات -->
+      <div style="margin-top:12px">
+        <div class="section-title">تحصیلات</div>
+        <div class="grid">
+          <div>
+            <label>تحصیلات</label>
+            <select id="education">
+              <option value="">انتخاب</option>
+              <option>زیر دیپلم</option>
+              <option>دیپلم</option>
+              <option>کاردانی</option>
+              <option>کارشناسی</option>
+              <option>دکتری</option>
+              <option>حوزوی</option>
+            </select>
+          </div>
+          <div>
+            <label>رشته تحصیلی</label>
+            <input type="text" id="major">
+          </div>
+        </div>
+      </div>
+
+      <!-- زبان -->
+      <div style="margin-top:12px">
+        <div class="section-title">زبان‌ها</div>
+        <div class="grid">
+          <div>
+            <label>زبان انگلیسی — خواندن/نوشتن</label>
+            <select id="engReading">
+              <option value="">انتخاب</option>
+              <option>ضعیف</option>
+              <option>خوب</option>
+              <option>عالی</option>
+            </select>
+          </div>
+          <div>
+            <label>زبان انگلیسی — مکالمه</label>
+            <select id="engSpeaking">
+              <option value="">انتخاب</option>
+              <option>ضعیف</option>
+              <option>خوب</option>
+              <option>عالی</option>
+            </select>
+          </div>
+
+          <div>
+            <label>زبان دوم (نام)</label>
+            <input type="text" id="secondLangName">
+          </div>
+          <div>
+            <label>زبان دوم — مکالمه</label>
+            <select id="secondLangSpeak">
+              <option value="">انتخاب</option>
+              <option>ضعیف</option>
+              <option>خوب</option>
+              <option>عالی</option>
+            </select>
+          </div>
+          <div>
+            <label>زبان دوم — خواندن/نوشتن</label>
+            <select id="secondLangRead">
+              <option value="">انتخاب</option>
+              <option>ضعیف</option>
+              <option>خوب</option>
+              <option>عالی</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- سوابق شغلی -->
+      <div style="margin-top:12px">
+        <div class="section-title">سوابق شغلی</div>
+        <div>
+          <div class="employment-list" id="employmentList">
+            <!-- آیتم‌ها اینجا اضافه می‌شوند -->
+          </div>
+          <div class="actions" style="margin-top:8px">
+            <button type="button" id="addEmployment">افزودن سابقه شغلی</button>
+            <button type="button" id="clearEmployments" class="secondary">پاک کردن همه</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- معرف -->
+      <div style="margin-top:12px">
+        <div class="section-title">معرف</div>
+        <div class="grid">
+          <div>
+            <label>نام معرف</label>
+            <input type="text" id="refFirst">
+          </div>
+          <div>
+            <label>نام خانوادگی معرف</label>
+            <input type="text" id="refLast">
+          </div>
+          <div>
+            <label>شغل معرف</label>
+            <input type="text" id="refJob">
+          </div>
+          <div>
+            <label>تلفن تماس معرف</label>
+            <input type="tel" id="refPhone">
+          </div>
+        </div>
+      </div>
+
+      <!-- وابستگان شاغل در شرکت -->
+      <div style="margin-top:12px">
+        <div class="section-title">وابستگان شاغل در شرکت سامان</div>
+        <div class="grid">
+          <div>
+            <label>نام</label>
+            <input type="text" id="relativeFirst">
+          </div>
+          <div>
+            <label>نام خانوادگی</label>
+            <input type="text" id="relativeLast">
+          </div>
+          <div>
+            <label>شغل/سمت</label>
+            <input type="text" id="relativeJob">
+          </div>
+          <div>
+            <label>نسبت</label>
+            <input type="text" id="relativeRelation">
+          </div>
+        </div>
+      </div>
+
+      <!-- مهارت ها -->
+      <div style="margin-top:12px">
+        <div class="section-title">مهارت‌های تخصصی</div>
+        <div class="grid">
+          <div>
+            <label>مهارت‌های تخصصی (کادر جلو)</label>
+            <input type="text" id="skills">
+          </div>
+          <div>
+            <label>مهارت رایانه‌ای</label>
+            <select id="itSkill">
+              <option value="">انتخاب</option>
+              <option>اصلا آشنایی ندارم</option>
+              <option>در حد دروس دانشگاه</option>
+              <option>دوره ICDL را گذراندم</option>
+              <option>دوره IT</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- محل سکونت -->
+      <div style="margin-top:12px">
+        <div class="section-title">محل سکونت</div>
+        <div class="grid">
+          <div>
+            <label>استان</label>
+            <input type="text" id="province">
+          </div>
+          <div>
+            <label>آدرس</label>
+            <textarea id="address"></textarea>
+          </div>
+          <div>
+            <label>کد پستی</label>
+            <input type="text" id="postal">
+          </div>
+          <div>
+            <label>تلفن ثابت</label>
+            <input type="tel" id="phone">
+          </div>
+          <div>
+            <label>تلفن همراه <span class="required">*</span></label>
+            <input type="tel" id="mobile" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- دکمه ها -->
+      <div class="footer card" style="align-items:center;">
+        <div class="small">پس از تکمیل، روی ثبت کلیک کنید تا پیش‌نمایش اطلاعات نمایان شود و بتوانید PDF بگیرید.</div>
+        <div class="actions">
+          <button type="submit" id="submitBtn">ثبت</button>
+          <button type="button" id="downloadPdf" class="secondary">دریافت PDF</button>
+          <button type="button" id="resetBtn" class="muted">پاک کردن فرم</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- پیش نمایش و خروجی -->
+    <div id="previewArea" class="card" style="display:none; margin-top:12px;">
+      <div class="section-title">پیش‌نمایش اطلاعات</div>
+      <div id="previewContent" class="preview"></div>
+      <div style="margin-top:12px" class="actions">
+        <button id="downloadPdf2">گرفتن PDF از پیش‌نمایش</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- کتابخانه‌ها -->
+  <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <script>
+    // init jalali datepicker برای فیلد تاریخ تولد
+    window.addEventListener('load', ()=>{
+      if(window.$ === undefined){
+        // persian-datepicker نیازی به jQuery ندارد از API مستقیم استفاده می‌کنیم
+      }
+      try {
+        var birth = document.getElementById('birthDate');
+        // persianDatepicker expects jQuery — but our CDN provides a version that can be invoked directly:
+        if (typeof $(birth).pDatepicker === 'function') {
+          $(birth).pDatepicker({format: 'YYYY/MM/DD', initialValueType: 'gregorian'});
+        } else if (window.persianDate && window.persianDate.toLocale) {
+          // fallback: no fancy picker available — leave as text input
+        }
+      } catch(e){
+        // ignore — input remains text
+      }
+    });
+
+    // مدیریت سوابق شغلی پویا
+    const employmentList = document.getElementById('employmentList');
+    document.getElementById('addEmployment').addEventListener('click', addEmployment);
+    document.getElementById('clearEmployments').addEventListener('click', ()=>{ employmentList.innerHTML = ''; });
+
+    function addEmployment(data = {}) {
+      const idx = Date.now();
+      const div = document.createElement('div');
+      div.className = 'employment-item';
+      div.innerHTML = `
+        <div class="inline" style="justify-content:space-between;align-items:center;margin-bottom:8px">
+          <strong>سابقه شغلی</strong>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="secondary btnRemove">حذف</button>
+          </div>
+        </div>
+        <div class="grid">
+          <div><label>محل خدمت</label><input type="text" class="emp_place" value="${data.place||''}"></div>
+          <div><label>سمت</label><input type="text" class="emp_title" value="${data.title||''}"></div>
+          <div><label>تاریخ شروع (شمسی)</label><input type="text" class="emp_start date-input" value="${data.start||''}"></div>
+          <div><label>تاریخ خاتمه (شمسی)</label><input type="text" class="emp_end date-input" value="${data.end||''}"></div>
+          <div><label>نحوه همکاری</label><input type="text" class="emp_type" value="${data.type||''}"></div>
+          <div><label>علت قطع همکاری</label><input type="text" class="emp_reason" value="${data.reason||''}"></div>
+        </div>
+      `;
+      employmentList.appendChild(div);
+
+      div.querySelector('.btnRemove').addEventListener('click', ()=> div.remove());
+    }
+
+    // افزودن یک رکورد خالی اولیه برای راحتی کاربر
+    addEmployment();
+
+    // هنگام submit -> جمع‌آوری داده‌ها، ولیدیشن و نمایش پیش‌نمایش
+    const form = document.getElementById('applyForm');
+    const previewArea = document.getElementById('previewArea');
+    const previewContent = document.getElementById('previewContent');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const valid = form.checkValidity();
+      if(!valid){
+        alert('لطفاً تمام فیلدهای اجباری را تکمیل کنید (ستاره‌دار).');
+        form.reportValidity();
+        return;
+      }
+      const data = collectFormData();
+      showPreview(data);
+    });
+
+    document.getElementById('downloadPdf').addEventListener('click', ()=>{
+      const data = collectFormData();
+      showPreview(data);
+      // small delay to render preview
+      setTimeout(()=> generatePdfFromPreview(), 300);
+    });
+    document.getElementById('downloadPdf2').addEventListener('click', generatePdfFromPreview);
+
+    document.getElementById('resetBtn').addEventListener('click', ()=>{
+      if(confirm('آیا مطمئنید؟ فرم پاک شود؟')) {
+        form.reset();
+        employmentList.innerHTML = '';
+        addEmployment();
+        previewArea.style.display = 'none';
+      }
+    });
+
+    function collectFormData(){
+      const get = id => document.getElementById(id).value.trim();
+      const data = {
+        header: 'شرکت خدمات هوایی سامان - اصفهان',
+        firstName: get('firstName'),
+        lastName: get('lastName'),
+        fatherName: get('fatherName'),
+        nationalId: get('nationalId'),
+        shenasnameh: get('shenasnameh'),
+        birthDate: get('birthDate'),
+        birthCity: get('birthCity'),
+        gender: get('gender'),
+        marital: get('marital'),
+        height: get('height'),
+        weight: get('weight'),
+        drivingLicense: get('drivingLicense'),
+        military: get('military'),
+        militaryPlace: get('militaryPlace'),
+        education: get('education'),
+        major: get('major'),
+        engReading: get('engReading'),
+        engSpeaking: get('engSpeaking'),
+        secondLangName: get('secondLangName'),
+        secondLangSpeak: get('secondLangSpeak'),
+        secondLangRead: get('secondLangRead'),
+        skills: get('skills'),
+        itSkill: get('itSkill'),
+        province: get('province'),
+        address: get('address'),
+        postal: get('postal'),
+        phone: get('phone'),
+        mobile: get('mobile'),
+        refFirst: get('refFirst'),
+        refLast: get('refLast'),
+        refJob: get('refJob'),
+        refPhone: get('refPhone'),
+        relativeFirst: get('relativeFirst'),
+        relativeLast: get('relativeLast'),
+        relativeJob: get('relativeJob'),
+        relativeRelation: get('relativeRelation'),
+        employments: []
+      };
+
+      // collect employments
+      Array.from(document.querySelectorAll('.employment-item')).forEach(item=>{
+        const e = {
+          place: item.querySelector('.emp_place').value.trim(),
+          title: item.querySelector('.emp_title').value.trim(),
+          start: item.querySelector('.emp_start').value.trim(),
+          end: item.querySelector('.emp_end').value.trim(),
+          type: item.querySelector('.emp_type').value.trim(),
+          reason: item.querySelector('.emp_reason').value.trim()
+        };
+        // if any field present consider it
+        if(Object.values(e).some(v=>v)) data.employments.push(e);
+      });
+
+      return data;
+    }
+
+    function showPreview(data){
+      let txt = '';
+      txt += `عنوان: ${data.header}\n\n`;
+      txt += `اطلاعات شخصی:\n`;
+      txt += `نام: ${data.firstName}  نام خانوادگی: ${data.lastName}\n`;
+      txt += `نام پدر: ${data.fatherName}  کدملی: ${data.nationalId}\n`;
+      txt += `شماره شناسنامه: ${data.shenasnameh}  تاریخ تولد (شمسی): ${data.birthDate}\n`;
+      txt += `شهر محل تولد: ${data.birthCity}  جنسیت: ${data.gender}\n`;
+      txt += `وضعیت تاهل: ${data.marital}  قد: ${data.height} cm  وزن: ${data.weight} kg\n`;
+      txt += `گواهینامه: ${data.drivingLicense}  وضعیت نظام وظیفه: ${data.military}  محل خدمت: ${data.militaryPlace}\n\n`;
+
+      txt += `تحصیلات:\nتحصیلات: ${data.education}  رشته: ${data.major}\n\n`;
+
+      txt += `زبان‌ها:\nانگلیسی — خواندن/نوشتن: ${data.engReading}  مکالمه: ${data.engSpeaking}\n`;
+      txt += `زبان دوم: ${data.secondLangName}  خواندن/نوشتن: ${data.secondLangRead}  مکالمه: ${data.secondLangSpeak}\n\n`;
+
+      txt += `مهارت‌ها:\nمهارت‌های تخصصی: ${data.skills}\nمهارت رایانه‌ای: ${data.itSkill}\n\n`;
+
+      txt += `سوابق شغلی (${data.employments.length}):\n`;
+      data.employments.forEach((e,i)=>{
+        txt += `#${i+1} — محل: ${e.place}  سمت: ${e.title}  از: ${e.start}  تا: ${e.end}  نحوه همکاری: ${e.type}  علت قطع: ${e.reason}\n`;
+      });
+      if(data.employments.length===0) txt += 'ندارد\n';
+      txt += `\nمعرف:\n${data.refFirst} ${data.refLast}  شغل: ${data.refJob}  تلفن: ${data.refPhone}\n\n`;
+
+      txt += `وابستگان شاغل در شرکت:\n${data.relativeFirst} ${data.relativeLast} — سمت: ${data.relativeJob} — نسبت: ${data.relativeRelation}\n\n`;
+
+      txt += `محل سکونت:\nاستان: ${data.province}\nآدرس: ${data.address}\nکدپستی: ${data.postal}\nتلفن ثابت: ${data.phone}\nتلفن همراه: ${data.mobile}\n`;
+
+      previewContent.textContent = txt;
+      previewArea.style.display = 'block';
+      // scroll to preview
+      previewArea.scrollIntoView({behavior:'smooth'});
+    }
+
+    function generatePdfFromPreview(){
+      if(previewArea.style.display === 'none'){
+        alert('ابتدا فرم را ثبت (نمایش پیش‌نمایش) کنید تا PDF ساخته شود.');
+        return;
+      }
+      // تبدیل پیش‌نمایش به PDF با html2pdf
+      const element = document.createElement('div');
+      element.style.direction = 'rtl';
+      element.style.fontFamily = 'Vazir, Tahoma, sans-serif';
+      element.style.padding = '18px';
+      element.style.background = '#fff';
+      element.style.color = '#222';
+      element.style.maxWidth = '800px';
+      element.innerHTML = `<pre style="font-family:inherit; font-size:14px; white-space:pre-wrap;">${escapeHtml(previewContent.textContent)}</pre>`;
+
+      const opt = {
+        margin:       10,
+        filename:     `Form_Saman_${new Date().toISOString().slice(0,10)}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS:true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function escapeHtml(text){
+      // preserve Persian characters and simple escaping for HTML inside <pre>
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+  </script>
+</body>
+</html>
