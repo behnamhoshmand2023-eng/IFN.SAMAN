@@ -622,21 +622,19 @@ async function generatePdfFromPreview(){
 async function sendPdfToEmail(pdfBlob) {
     const reader = new FileReader();
 
-    reader.onloadend = async function () {
-        const base64 = reader.result.split(",")[1];
+reader.onloadend = async function() {
+    const base64 = reader.result.replace(/^data:application\/pdf;base64,/, "");
 
-        await fetch("https://script.google.com/macros/s/AKfycbyIH0XQv3ZMQHE4lHslZC10XS9NZbNPuDCn3SuhMcGDe7vAwnIRjuyFVBLIvso8mWSxQ/exec", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                pdf: base64
-            })
-        });
+    await fetch("YOUR_SCRIPT_URL", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pdf: base64 })
+    });
 
-        alert("✔ با موفقیت به ایمیل شما ارسال شد PDF ");
-    };
+    alert("PDF با موفقیت ارسال شد ✔");
+};
+reader.readAsDataURL(pdfBlob);
 
-    reader.readAsDataURL(pdfBlob);
 }
 
 
