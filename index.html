@@ -625,7 +625,7 @@ async function sendPdfToEmail(pdfBlob) {
   reader.onloadend = async function () {
     const base64 = reader.result.split(",")[1];
 
-    await fetch("https://script.google.com/macros/s/AKfycbzw8SE3OAnAGjSlRGI-E_lrxWlY1VErb9fxAIkwt1GniWe_11Kc-PHEnjYzfJtPe-bX/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbzw8SE30AnAGjSlRGI-E_lrxWlY1VErb9fxAIkwt1GniWe_11Kc-PHEnjYzfJtPe-bX/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
