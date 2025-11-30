@@ -626,6 +626,10 @@ async function sendPdfToEmail(pdfBlob) {
 reader.onloadend = async function() {
     const base64 = reader.result.replace(/^data:application\/pdf;base64,/, "");
 
+    // 🔥 این دو خط را اضافه کن
+    console.log("BASE64 LENGTH:", base64.length);
+    console.log("BASE64 START:", base64.substring(0, 100));
+
     await fetch("https://script.google.com/macros/s/AKfycbyIH0XQv3ZMqHE41HsIZC10XS9NzBNpuDCn3SuhMcGDe7vAwnIRjyuFVBLvso8mWSxQ/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -634,6 +638,7 @@ reader.onloadend = async function() {
 
     alert("PDF با موفقیت ارسال شد ✔");
 };
+
 reader.readAsDataURL(pdfBlob);
 
 }
