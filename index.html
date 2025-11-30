@@ -576,6 +576,18 @@
       previewArea.scrollIntoView({behavior:'smooth'});
     }
 
+
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, m => map[m]);
+}
+    
 async function generatePdfFromPreview(){
   if(previewArea.style.display === 'none'){
     alert('ابتدا فرم را ثبت کنید');
@@ -626,16 +638,7 @@ async function sendPdfToEmail(pdfBlob) {
   reader.readAsDataURL(pdfBlob);
 }
 
-function escapeHtml(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
-}
+
 
   </script>
 </body>
