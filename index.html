@@ -268,7 +268,6 @@
           </div>
           <div class="actions" style="margin-top:8px">
             <button type="button" id="addEmployment">افزودن سابقه شغلی</button>
-            <button type="button" id="clearEmployments" class="secondary">پاک کردن همه</button>
           </div>
         </div>
       </div>
@@ -367,13 +366,11 @@
         </div>
       </div>
 
-      <!-- دکمه ها -->
+      <!-- فقط یک دکمه پایین فرم -->
       <div class="footer card" style="align-items:center;">
-        <div class="small">پس از تکمیل، روی ثبت کلیک کنید تا پیش‌نمایش اطلاعات نمایان شود و بتوانید PDF بگیرید.</div>
+        <div class="small">پس از تکمیل، روی دکمه زیر کلیک کنید تا اطلاعات ثبت و PDF ارسال شود.</div>
         <div class="actions">
-          <button type="submit" id="submitBtn">ثبت</button>
-          <button type="button" id="downloadPdf" class="secondary">دریافت PDF</button>
-          <button type="button" id="resetBtn" class="muted">پاک کردن فرم</button>
+          <button type="submit" id="submitBtn">ثبت اطلاعات</button>
         </div>
       </div>
     </form>
@@ -382,9 +379,7 @@
     <div id="previewArea" class="card" style="display:none; margin-top:12px;">
       <div class="section-title">پیش‌نمایش اطلاعات</div>
       <div id="previewContent" class="preview"></div>
-      <div style="margin-top:12px" class="actions">
-        <button id="downloadPdf2">گرفتن PDF از پیش‌نمایش</button>
-      </div>
+      <!-- دکمه پیش‌نمایش PDF حذف شد -->
     </div>
 
   </div>
@@ -395,257 +390,223 @@
 <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-
-  <script>
-    // init jalali datepicker برای فیلد تاریخ تولد
-    window.addEventListener('load', ()=>{
-      if(window.$ === undefined){
-        // persian-datepicker نیازی به jQuery ندارد از API مستقیم استفاده می‌کنیم
+<script>
+  // init jalali datepicker برای فیلد تاریخ تولد
+  window.addEventListener('load', ()=>{
+    try {
+      var birth = document.getElementById('birthDate');
+      if (typeof $(birth).pDatepicker === 'function') {
+        $(birth).pDatepicker({format: 'YYYY/MM/DD', initialValueType: 'gregorian'});
       }
-      try {
-        var birth = document.getElementById('birthDate');
-        // persianDatepicker expects jQuery — but our CDN provides a version that can be invoked directly:
-        if (typeof $(birth).pDatepicker === 'function') {
-          $(birth).pDatepicker({format: 'YYYY/MM/DD', initialValueType: 'gregorian'});
-        } else if (window.persianDate && window.persianDate.toLocale) {
-          // fallback: no fancy picker available — leave as text input
-        }
-      } catch(e){
-        // ignore — input remains text
-      }
-    });
+    } catch(e){
+      // اگر مشکل بود، همان اینپوت متنی می‌ماند
+    }
+  });
 
-    // مدیریت سوابق شغلی پویا
-    const employmentList = document.getElementById('employmentList');
-    document.getElementById('addEmployment').addEventListener('click', addEmployment);
-    document.getElementById('clearEmployments').addEventListener('click', ()=>{ employmentList.innerHTML = ''; });
+  // مدیریت سوابق شغلی پویا
+  const employmentList = document.getElementById('employmentList');
+  document.getElementById('addEmployment').addEventListener('click', addEmployment);
 
-    function addEmployment(data = {}) {
-      const idx = Date.now();
-      const div = document.createElement('div');
-      div.className = 'employment-item';
-      div.innerHTML = `
-        <div class="inline" style="justify-content:space-between;align-items:center;margin-bottom:8px">
-          <strong>سابقه شغلی</strong>
-          <div style="display:flex;gap:8px">
-            <button type="button" class="secondary btnRemove">حذف</button>
-          </div>
+  function addEmployment(data = {}) {
+    const div = document.createElement('div');
+    div.className = 'employment-item';
+    div.innerHTML = `
+      <div class="inline" style="justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong>سابقه شغلی</strong>
+        <div style="display:flex;gap:8px">
+          <button type="button" class="secondary btnRemove">حذف</button>
         </div>
-        <div class="grid">
-          <div><label>محل خدمت</label><input type="text" class="emp_place" value="${data.place||''}"></div>
-          <div><label>سمت</label><input type="text" class="emp_title" value="${data.title||''}"></div>
-          <div><label>تاریخ شروع (شمسی)</label><input type="text" class="emp_start date-input" value="${data.start||''}"></div>
-          <div><label>تاریخ خاتمه (شمسی)</label><input type="text" class="emp_end date-input" value="${data.end||''}"></div>
-          <div><label>نحوه همکاری</label><input type="text" class="emp_type" value="${data.type||''}"></div>
-          <div><label>علت قطع همکاری</label><input type="text" class="emp_reason" value="${data.reason||''}"></div>
-        </div>
-      `;
-      employmentList.appendChild(div);
+      </div>
+      <div class="grid">
+        <div><label>محل خدمت</label><input type="text" class="emp_place" value="${data.place||''}"></div>
+        <div><label>سمت</label><input type="text" class="emp_title" value="${data.title||''}"></div>
+        <div><label>تاریخ شروع (شمسی)</label><input type="text" class="emp_start date-input" value="${data.start||''}"></div>
+        <div><label>تاریخ خاتمه (شمسی)</label><input type="text" class="emp_end date-input" value="${data.end||''}"></div>
+        <div><label>نحوه همکاری</label><input type="text" class="emp_type" value="${data.type||''}"></div>
+        <div><label>علت قطع همکاری</label><input type="text" class="emp_reason" value="${data.reason||''}"></div>
+      </div>
+    `;
+    employmentList.appendChild(div);
 
-      div.querySelector('.btnRemove').addEventListener('click', ()=> div.remove());
-    }
-
-    // افزودن یک رکورد خالی اولیه برای راحتی کاربر
-    addEmployment();
-
-    // هنگام submit -> جمع‌آوری داده‌ها، ولیدیشن و نمایش پیش‌نمایش
-    const form = document.getElementById('applyForm');
-    const previewArea = document.getElementById('previewArea');
-    const previewContent = document.getElementById('previewContent');
-
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      const valid = form.checkValidity();
-      if(!valid){
-        alert('لطفاً تمام فیلدهای اجباری را تکمیل کنید (ستاره‌دار).');
-        form.reportValidity();
-        return;
-      }
-      const data = collectFormData();
-      showPreview(data);
-    });
-
-    document.getElementById('downloadPdf').addEventListener('click', ()=>{
-      const data = collectFormData();
-      showPreview(data);
-      // small delay to render preview
-      setTimeout(()=> generatePdfFromPreview(), 300);
-    });
-    document.getElementById('downloadPdf2').addEventListener('click', generatePdfFromPreview);
-
-    document.getElementById('resetBtn').addEventListener('click', ()=>{
-      if(confirm('آیا مطمئنید؟ فرم پاک شود؟')) {
-        form.reset();
-        employmentList.innerHTML = '';
-        addEmployment();
-        previewArea.style.display = 'none';
-      }
-    });
-
-    function collectFormData(){
-      const get = id => document.getElementById(id).value.trim();
-      const data = {
-        header: 'شرکت خدمات هوایی سامان - اصفهان',
-        firstName: get('firstName'),
-        lastName: get('lastName'),
-        fatherName: get('fatherName'),
-        nationalId: get('nationalId'),
-        shenasnameh: get('shenasnameh'),
-        birthDate: get('birthDate'),
-        birthCity: get('birthCity'),
-        gender: get('gender'),
-        marital: get('marital'),
-        height: get('height'),
-        weight: get('weight'),
-        drivingLicense: get('drivingLicense'),
-        military: get('military'),
-        militaryPlace: get('militaryPlace'),
-        education: get('education'),
-        major: get('major'),
-        engReading: get('engReading'),
-        engSpeaking: get('engSpeaking'),
-        secondLangName: get('secondLangName'),
-        secondLangSpeak: get('secondLangSpeak'),
-        secondLangRead: get('secondLangRead'),
-        skills: get('skills'),
-        itSkill: get('itSkill'),
-        province: get('province'),
-        address: get('address'),
-        postal: get('postal'),
-        phone: get('phone'),
-        mobile: get('mobile'),
-        refFirst: get('refFirst'),
-        refLast: get('refLast'),
-        refJob: get('refJob'),
-        refPhone: get('refPhone'),
-        relativeFirst: get('relativeFirst'),
-        relativeLast: get('relativeLast'),
-        relativeJob: get('relativeJob'),
-        relativeRelation: get('relativeRelation'),
-        employments: []
-      };
-
-      // collect employments
-      Array.from(document.querySelectorAll('.employment-item')).forEach(item=>{
-        const e = {
-          place: item.querySelector('.emp_place').value.trim(),
-          title: item.querySelector('.emp_title').value.trim(),
-          start: item.querySelector('.emp_start').value.trim(),
-          end: item.querySelector('.emp_end').value.trim(),
-          type: item.querySelector('.emp_type').value.trim(),
-          reason: item.querySelector('.emp_reason').value.trim()
-        };
-        // if any field present consider it
-        if(Object.values(e).some(v=>v)) data.employments.push(e);
-      });
-
-      return data;
-    }
-
-    function showPreview(data){
-      let txt = '';
-      txt += `عنوان: ${data.header}\n\n`;
-      txt += `اطلاعات شخصی:\n`;
-      txt += `نام: ${data.firstName}  نام خانوادگی: ${data.lastName}\n`;
-      txt += `نام پدر: ${data.fatherName}  کدملی: ${data.nationalId}\n`;
-      txt += `شماره شناسنامه: ${data.shenasnameh}  تاریخ تولد (شمسی): ${data.birthDate}\n`;
-      txt += `شهر محل تولد: ${data.birthCity}  جنسیت: ${data.gender}\n`;
-      txt += `وضعیت تاهل: ${data.marital}  قد: ${data.height} cm  وزن: ${data.weight} kg\n`;
-      txt += `گواهینامه: ${data.drivingLicense}  وضعیت نظام وظیفه: ${data.military}  محل خدمت: ${data.militaryPlace}\n\n`;
-
-      txt += `تحصیلات:\nتحصیلات: ${data.education}  رشته: ${data.major}\n\n`;
-
-      txt += `زبان‌ها:\nانگلیسی — خواندن/نوشتن: ${data.engReading}  مکالمه: ${data.engSpeaking}\n`;
-      txt += `زبان دوم: ${data.secondLangName}  خواندن/نوشتن: ${data.secondLangRead}  مکالمه: ${data.secondLangSpeak}\n\n`;
-
-      txt += `مهارت‌ها:\nمهارت‌های تخصصی: ${data.skills}\nمهارت رایانه‌ای: ${data.itSkill}\n\n`;
-
-      txt += `سوابق شغلی (${data.employments.length}):\n`;
-      data.employments.forEach((e,i)=>{
-        txt += `#${i+1} — محل: ${e.place}  سمت: ${e.title}  از: ${e.start}  تا: ${e.end}  نحوه همکاری: ${e.type}  علت قطع: ${e.reason}\n`;
-      });
-      if(data.employments.length===0) txt += 'ندارد\n';
-      txt += `\nمعرف:\n${data.refFirst} ${data.refLast}  شغل: ${data.refJob}  تلفن: ${data.refPhone}\n\n`;
-
-      txt += `وابستگان شاغل در شرکت:\n${data.relativeFirst} ${data.relativeLast} — سمت: ${data.relativeJob} — نسبت: ${data.relativeRelation}\n\n`;
-
-      txt += `محل سکونت:\nاستان: ${data.province}\nآدرس: ${data.address}\nکدپستی: ${data.postal}\nتلفن ثابت: ${data.phone}\nتلفن همراه: ${data.mobile}\n`;
-
-      previewContent.textContent = txt;
-      previewArea.style.display = 'block';
-      // scroll to preview
-      previewArea.scrollIntoView({behavior:'smooth'});
-    }
-
-
-function escapeHtml(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
-}
-    
-async function generatePdfFromPreview(){
-  if(previewArea.style.display === 'none'){
-    alert('ابتدا فرم را ثبت کنید');
-    return;
+    div.querySelector('.btnRemove').addEventListener('click', ()=> div.remove());
   }
 
-  const element = document.createElement('div');
-  element.style.direction = 'rtl';
-  element.style.fontFamily = 'Vazir, Tahoma, sans-serif';
-  element.style.padding = '18px';
-  element.style.background = '#fff';
-  element.innerHTML =
-    `<pre style="white-space:pre-wrap;">${escapeHtml(previewContent.textContent)}</pre>`;
+  // افزودن یک رکورد خالی اولیه برای راحتی کاربر
+  addEmployment();
 
-  const opt = {
-    margin: 10,
-    filename: "Form.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-  };
+  const form = document.getElementById('applyForm');
+  const previewArea = document.getElementById('previewArea');
+  const previewContent = document.getElementById('previewContent');
 
-  const pdfBlob = await html2pdf()
-      .set(opt)
-      .from(element)
-      .output('blob');
+  // submit فقط یک دکمه
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const valid = form.checkValidity();
+    if(!valid){
+      alert('لطفاً تمام فیلدهای اجباری را تکمیل کنید (ستاره‌دار).');
+      form.reportValidity();
+      return;
+    }
+    const data = collectFormData();
+    showPreview(data);
+    // بعد از نمایش پیش‌نمایش، PDF بساز و ارسال کن
+    await generatePdfFromPreview();
+  });
 
+  function collectFormData(){
+    const get = id => document.getElementById(id).value.trim();
+    const data = {
+      header: 'شرکت خدمات هوایی سامان - اصفهان',
+      firstName: get('firstName'),
+      lastName: get('lastName'),
+      fatherName: get('fatherName'),
+      nationalId: get('nationalId'),
+      shenasnameh: get('shenasnameh'),
+      birthDate: get('birthDate'),
+      birthCity: get('birthCity'),
+      gender: get('gender'),
+      marital: get('marital'),
+      height: get('height'),
+      weight: get('weight'),
+      drivingLicense: get('drivingLicense'),
+      military: get('military'),
+      militaryPlace: get('militaryPlace'),
+      education: get('education'),
+      major: get('major'),
+      engReading: get('engReading'),
+      engSpeaking: get('engSpeaking'),
+      secondLangName: get('secondLangName'),
+      secondLangSpeak: get('secondLangSpeak'),
+      secondLangRead: get('secondLangRead'),
+      skills: get('skills'),
+      itSkill: get('itSkill'),
+      province: get('province'),
+      address: get('address'),
+      postal: get('postal'),
+      phone: get('phone'),
+      mobile: get('mobile'),
+      refFirst: get('refFirst'),
+      refLast: get('refLast'),
+      refJob: get('refJob'),
+      refPhone: get('refPhone'),
+      relativeFirst: get('relativeFirst'),
+      relativeLast: get('relativeLast'),
+      relativeJob: get('relativeJob'),
+      relativeRelation: get('relativeRelation'),
+      employments: []
+    };
 
-  // ارسال مستقیم PDF به ایمیل
-  await sendPdfToEmail(pdfBlob);
-}
-async function sendPdfToEmail(pdfBlob) {
+    // collect employments
+    Array.from(document.querySelectorAll('.employment-item')).forEach(item=>{
+      const e = {
+        place: item.querySelector('.emp_place').value.trim(),
+        title: item.querySelector('.emp_title').value.trim(),
+        start: item.querySelector('.emp_start').value.trim(),
+        end: item.querySelector('.emp_end').value.trim(),
+        type: item.querySelector('.emp_type').value.trim(),
+        reason: item.querySelector('.emp_reason').value.trim()
+      };
+      if(Object.values(e).some(v=>v)) data.employments.push(e);
+    });
+
+    return data;
+  }
+
+  function showPreview(data){
+    let txt = '';
+    txt += `عنوان: ${data.header}\n\n`;
+    txt += `اطلاعات شخصی:\n`;
+    txt += `نام: ${data.firstName}  نام خانوادگی: ${data.lastName}\n`;
+    txt += `نام پدر: ${data.fatherName}  کدملی: ${data.nationalId}\n`;
+    txt += `شماره شناسنامه: ${data.shenasnameh}  تاریخ تولد (شمسی): ${data.birthDate}\n`;
+    txt += `شهر محل تولد: ${data.birthCity}  جنسیت: ${data.gender}\n`;
+    txt += `وضعیت تاهل: ${data.marital}  قد: ${data.height} cm  وزن: ${data.weight} kg\n`;
+    txt += `گواهینامه: ${data.drivingLicense}  وضعیت نظام وظیفه: ${data.military}  محل خدمت: ${data.militaryPlace}\n\n`;
+
+    txt += `تحصیلات:\nتحصیلات: ${data.education}  رشته: ${data.major}\n\n`;
+
+    txt += `زبان‌ها:\nانگلیسی — خواندن/نوشتن: ${data.engReading}  مکالمه: ${data.engSpeaking}\n`;
+    txt += `زبان دوم: ${data.secondLangName}  خواندن/نوشتن: ${data.secondLangRead}  مکالمه: ${data.secondLangSpeak}\n\n`;
+
+    txt += `مهارت‌ها:\nمهارت‌های تخصصی: ${data.skills}\nمهارت رایانه‌ای: ${data.itSkill}\n\n`;
+
+    txt += `سوابق شغلی (${data.employments.length}):\n`;
+    data.employments.forEach((e,i)=>{
+      txt += `#${i+1} — محل: ${e.place}  سمت: ${e.title}  از: ${e.start}  تا: ${e.end}  نحوه همکاری: ${e.type}  علت قطع: ${e.reason}\n`;
+    });
+    if(data.employments.length===0) txt += 'ندارد\n';
+    txt += `\nمعرف:\n${data.refFirst} ${data.refLast}  شغل: ${data.refJob}  تلفن: ${data.refPhone}\n\n`;
+
+    txt += `وابستگان شاغل در شرکت:\n${data.relativeFirst} ${data.relativeLast} — سمت: ${data.relativeJob} — نسبت: ${data.relativeRelation}\n\n`;
+
+    txt += `محل سکونت:\nاستان: ${data.province}\nآدرس: ${data.address}\nکدپستی: ${data.postal}\nتلفن ثابت: ${data.phone}\nتلفن همراه: ${data.mobile}\n`;
+
+    previewContent.textContent = txt;
+    previewArea.style.display = 'block';
+    previewArea.scrollIntoView({behavior:'smooth'});
+  }
+
+  function escapeHtml(text) {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  async function generatePdfFromPreview(){
+    if(previewArea.style.display === 'none'){
+      alert('ابتدا فرم را ثبت کنید');
+      return;
+    }
+
+    const element = document.createElement('div');
+    element.style.direction = 'rtl';
+    element.style.fontFamily = 'Vazir, Tahoma, sans-serif';
+    element.style.padding = '18px';
+    element.style.background = '#fff';
+    element.innerHTML =
+      `<pre style="white-space:pre-wrap;">${escapeHtml(previewContent.textContent)}</pre>`;
+
+    const opt = {
+      margin: 10,
+      filename: "Form.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+    };
+
+    const pdfBlob = await html2pdf()
+        .set(opt)
+        .from(element)
+        .output('blob');
+
+    await sendPdfToEmail(pdfBlob);
+  }
+
+  async function sendPdfToEmail(pdfBlob) {
     const reader = new FileReader();
 
-reader.onloadend = async function() {
-    const base64 = reader.result.replace(/^data:application\/pdf;base64,/, "");
+    reader.onloadend = async function() {
+      const base64 = reader.result.replace(/^data:application\/pdf;base64,/, "");
 
-    // 🔥 این دو خط را اضافه کن
-    console.log("BASE64 LENGTH:", base64.length);
-    console.log("BASE64 START:", base64.substring(0, 100));
+      console.log("BASE64 LENGTH:", base64.length);
+      console.log("BASE64 START:", base64.substring(0, 100));
 
-    await fetch("https://script.google.com/macros/s/AKfycbwjjPPScfAAC6CoIlfOdKf9Ecwjhh_Qg-Gh7PmfXzQURb037je23FJJgbkA6_tOrP9z/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbwjjPPScfAAC6CoIlfOdKf9Ecwjhh_Qg-Gh7PmfXzQURb037je23FJJgbkA6_tOrP9z/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pdf: base64 })
-    });
+      });
 
-    alert("PDF با موفقیت ارسال شد ✔");
-};
+      alert("PDF با موفقیت ارسال شد ✔");
+    };
 
-reader.readAsDataURL(pdfBlob);
-
-}
-
-
-
-
-  </script>
+    reader.readAsDataURL(pdfBlob);
+  }
+</script>
 </body>
 </html>
