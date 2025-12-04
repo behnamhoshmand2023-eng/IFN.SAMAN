@@ -596,7 +596,7 @@
       console.log("BASE64 LENGTH:", base64.length);
       console.log("BASE64 START:", base64.substring(0, 100));
 
-      await fetch("https://script.google.com/macros/s/AKfycbwjjPPScfAAC6CoIlfOdKf9Ecwjhh_Qg-Gh7PmfXzQURb037je23FJJgbkA6_tOrP9z/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbynqTycH8pbUFKFeMlLOMgrHzbk3PIu4WRuOfnqugFiVaC8RXJs_x-SoKH4rzNqHY9N/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pdf: base64 })
